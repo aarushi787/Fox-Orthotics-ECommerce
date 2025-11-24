@@ -3,6 +3,8 @@ import Filters from './Filters';
 import ProductGrid from './ProductGrid';
 import ActiveFilters from './ActiveFilters';
 import { Product, FiltersState } from '../types';
+// ❌ REMOVE THIS — we don't fetch products inside this component
+// import { getProductsWithImages } from "./../services/api";
 
 interface ProductListingPageProps {
     products: Product[];
@@ -39,8 +41,10 @@ const ProductListingPage: React.FC<ProductListingPageProps> = (props) => {
                     <span>Show Filters</span>
                 </button>
             </div>
+
             <div className="flex flex-col lg:flex-row gap-8">
-              {/* Desktop Sidebar - Always visible */}
+              
+              {/* Desktop Sidebar */}
               <aside className="hidden lg:block lg:w-1/4">
                 <Filters 
                   filters={props.filters} 
@@ -49,12 +53,10 @@ const ProductListingPage: React.FC<ProductListingPageProps> = (props) => {
                 />
               </aside>
 
-               {/* Mobile Off-canvas Filters */}
+              {/* Mobile Filters */}
               <div className={`fixed inset-0 z-40 lg:hidden transition-opacity duration-300 ${isMobileFiltersOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-                 {/* Overlay */}
                  <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setIsMobileFiltersOpen(false)}></div>
                  
-                 {/* Content */}
                  <div className={`relative bg-white h-full w-4/5 max-w-xs shadow-xl transform transition-transform duration-300 ease-in-out ${isMobileFiltersOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                      <div className="p-4 flex justify-between items-center border-b">
                          <h2 className="text-lg font-bold">Filters</h2>
@@ -76,8 +78,10 @@ const ProductListingPage: React.FC<ProductListingPageProps> = (props) => {
                     searchQuery={props.searchQuery}
                     onRemove={props.onRemoveActiveFilter}
                 />
+
+                {/* 🔥 ProductGrid receives Firestore images through props.products */}
                 <ProductGrid 
-                    products={props.products} 
+                    products={props.products}
                     wishlist={props.wishlist}
                     onToggleWishlist={props.onToggleWishlist}
                     onAddToCart={props.onAddToCart}
